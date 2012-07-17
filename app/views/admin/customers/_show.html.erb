@@ -1,0 +1,48 @@
+<div class="panel">
+  <h3>Detalhes</h3>
+  <div class="panel_contents">
+    <div class="attributes_table customer" id="attributes_table_customer_26">
+      <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <th>Saldo</th>
+          <td><%= @customer.balance %></td>
+        </tr>
+        <tr>
+          <th>Nome:</th>
+          <td><%= @customer.name %></td>
+        </tr>
+        <tr>
+          <th>Email:</th>
+          <td><%= @customer.email %></td>
+        </tr>
+        <tr>
+          <th>Vendas não pagas:</th>
+          <td>
+                <% @customer.unpaid_orders.each do |order| %>
+                  <%= order.created_at.strftime("%d/%m/%Y") %> - <%= order.product_name %> => <%= order.total %> |
+                  <%= link_to 'Edit', edit_admin_order_path(order) %><br />
+                <% end %>
+          </td>
+        </tr>
+        <tr>
+          <th>Vendas feitas:</th>
+          <td>
+                <% @customer.paid_orders.each do |order| %>
+                  <%= order.created_at.strftime("%d/%m/%Y") %> - <%= order.product_name %> => <%= order.total %>
+                  <br />
+                <% end %>
+          </td>
+        </tr>
+        <tr>
+          <th>Histórico de créditos:</th>
+          <td>
+              <% @customer.credits.each do |credit| %>
+                  <%= credit.created_at.strftime("%d/%m/%Y") %> => <%= credit.value %> | (<%= credit.used? ? "Usado" : "Não usado" %>)
+                   | <%= link_to 'Utilizar crédito', edit_admin_credit_path(credit) unless credit.used? %><br />
+              <% end %>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

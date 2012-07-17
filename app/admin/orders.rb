@@ -9,4 +9,13 @@ ActiveAdmin.register Order do
       f.buttons
     end
   end
+
+  index do
+    column :customer
+    column :product
+    column :quantity
+    column :paid
+    column :paid_at
+    column :created_at
+  end
 end
