@@ -7,6 +7,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<div class="menu">
+    <%= link_to 'Vendas', orders_path %>
+    <%= link_to 'Clientes', customers_path %>
+    <%= link_to 'Produtos', products_path %>
+</div>
 
 <%= yield %>
 
