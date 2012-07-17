@@ -1,4 +1,6 @@
 Cones::Application.routes.draw do
+  resources :credits
+
   resources :orders
 
   resources :customers
