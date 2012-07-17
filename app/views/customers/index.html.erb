@@ -4,6 +4,8 @@
   <tr>
     <th>Name</th>
     <th>Email</th>
+    <th>Total vendas</th>
+    <th>Saldo</th>
     <th></th>
     <th></th>
     <th></th>
@@ -13,6 +15,8 @@
   <tr>
     <td><%= customer.name %></td>
     <td><%= customer.email %></td>
+    <td><%= customer.total_paid_orders %></td>
+    <td><%= customer.balance %></td>
     <td><%= link_to 'Show', customer %></td>
     <td><%= link_to 'Edit', edit_customer_path(customer) %></td>
     <td><%= link_to 'Destroy', customer, confirm: 'Are you sure?', method: :delete %></td>

@@ -1,6 +1,5 @@
 <p id="notice"><%= notice %></p>
-<p><b>Créditos:<b> <%= @customer.credits %></p>
-<p><b>Saldo devedor:</b> <%= @customer.balance_due %></p>
+<p><b>Saldo:</b> <%= @customer.balance %></p>
 
 <p>
   <b>Name:</b>
@@ -13,12 +12,27 @@
 </p>
 
 <p>
-    <b>Vendas não pagas:</b><br />
+    <b>Vendas não pagas (Total de <%= @customer.total_unpaid_orders %>):</b><br />
     <% @customer.unpaid_orders.each do |order| %>
-        Produto: <%= order.product_name %><br />
-        Dia: <%= order.created_at.strftime("%d/%m/%Y") %><br />
-        Quantidade: <%= order.quantity %> | Total: <%= order.total %>
-        <hr>
+        <%= order.created_at.strftime("%d/%m/%Y") %> - <%= order.product_name %> => <%= order.total %> |
+        <%= link_to 'Edit', edit_order_path(order) %>
+        <br />
+    <% end %>
+</p>
+
+<p>
+    <b>Vendas feitas (Total de <%= @customer.total_paid_orders %>):</b><br />
+    <% @customer.paid_orders.each do |order| %>
+        <%= order.created_at.strftime("%d/%m/%Y") %> - <%= order.product_name %> => <%= order.total %>
+        <br />
+    <% end %>
+</p>
+
+<p>
+    <b>Histórico de créditos (<%= "#{@customer.total_unused_credits} não usados de #{@customer.total_credits}" %>) :</b><br />
+    <% @customer.credits.each do |credit| %>
+        <%= credit.created_at.strftime("%d/%m/%Y") %> => <%= credit.value %> | (<%= credit.used? ? "Usado" : "Não usado" %>)
+         | <%= link_to 'Utilizar crédito', edit_credit_path(credit) unless credit.used? %><br />
     <% end %>
 </p>
 
