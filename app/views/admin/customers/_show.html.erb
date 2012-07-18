@@ -17,21 +17,12 @@
         </tr>
         <tr>
           <th>Total vendas:</th>
-          <td><%= @customer.total_paid_orders %></td>
-        </tr>
-        <tr>
-          <th>Vendas não pagas:</th>
-          <td>
-                <% @customer.unpaid_orders.each do |order| %>
-                  <%= order.created_at.strftime("%d/%m/%Y") %> - <%= order.product_name %> => <%= order.total %> |
-                  <%= link_to 'Edit', edit_admin_order_path(order) %><br />
-                <% end %>
-          </td>
+          <td><%= @customer.total_orders %></td>
         </tr>
         <tr>
           <th>Vendas feitas:</th>
           <td>
-                <% @customer.paid_orders.each do |order| %>
+                <% @customer.orders.each do |order| %>
                   <%= order.created_at.strftime("%d/%m/%Y") %> - <%= order.product_name %> => <%= order.total %>
                   <br />
                 <% end %>
@@ -41,8 +32,15 @@
           <th>Histórico de créditos:</th>
           <td>
               <% @customer.credits.each do |credit| %>
-                  <%= credit.created_at.strftime("%d/%m/%Y") %> => <%= credit.value %> | (<%= credit.used? ? "Usado" : "Não usado" %>)
-                   | <%= link_to 'Utilizar crédito', edit_admin_credit_path(credit) unless credit.used? %><br />
+                  <%= credit.created_at.strftime("%d/%m/%Y") %> => <%= credit.value %><br />
+              <% end %>
+          </td>
+        </tr>
+        <tr>
+          <th>Histórico de débitos:</th>
+          <td>
+              <% @customer.debits.each do |debit| %>
+                  <%= debit.created_at.strftime("%d/%m/%Y") %> => <%= debit.value %><br />
               <% end %>
           </td>
         </tr>

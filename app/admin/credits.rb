@@ -3,6 +3,7 @@ ActiveAdmin.register Credit do
     column :customer
     column :value
     column :created_at
-    column :used
+
+    default_actions
   end
 end

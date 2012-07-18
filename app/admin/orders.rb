@@ -4,7 +4,7 @@ ActiveAdmin.register Order do
       f.input :product
       f.input :customer, as: :select, collection: Customer.order("name ASC").all
       f.input :quantity
-      f.input :paid
+      f.input :payment_value
 
       f.buttons
     end
@@ -14,8 +14,9 @@ ActiveAdmin.register Order do
     column :customer
     column :product
     column :quantity
-    column :paid
-    column :paid_at
+    column :payment_value
     column :created_at
+
+    default_actions
   end
 end

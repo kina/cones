@@ -2,7 +2,7 @@ ActiveAdmin.register Customer do
   index do
     column :name
     column :email
-    column :total_paid_orders
+    column :total_orders
     column :balance
 
     default_actions

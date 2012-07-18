@@ -8,10 +8,18 @@ ActiveAdmin::Dashboards.build do
   #
 
     section "TOP Clientes" do
-      customers = Customer.all.sort_by {|c| c.total_paid_orders}.reverse.take(4)
+      customers = Customer.all.sort_by {|c| c.total_orders}.reverse.take(4)
       table_for customers do |t|
         t.column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
-        t.column("Valor") { |c| c.total_paid_orders}
+        t.column("Valor") { |c| c.total_orders}
+      end
+    end
+
+    section "A pagar" do
+      customers = Customer.all.select {|c| c.balance < 0}.sort_by { |e| e.balance }
+      table_for customers do |t|
+        t.column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
+        t.column("Valor") { |c| c.balance}
       end
     end
 
