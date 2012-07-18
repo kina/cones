@@ -1,0 +1,12 @@
+Source: cones
+Section: misc
+Priority: extra
+Maintainer: Leandro Maringolo <leandronsp@gmail.com>
+Build-Depends: ruby1.9.1, ruby1.9.1-dev
+Standards-Version: 0.1
+Homepage: http://github.com/leandronsp/cones
+
+Package: cones
+Architecture: any
+Depends: ruby1.9.1, libbundler-ruby1.9.1, libyaml-0-2
+Description: Web POS for Cones
