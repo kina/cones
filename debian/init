@@ -1,0 +1,57 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:   cones-monitor
+# Required-Start: $syslog $remote_fs
+# Required-Stop:  $syslog $remote_fs
+# Should-Start:   $local_fs
+# Should-Stop:    $local_fs
+# Default-Start:  2 3 4 5
+# Default-Stop:   0 1 6
+# Short-Description:  Cones
+# Description: Web POS for Cones
+### END INIT INFO
+
+PATH+=$(NEW_PATH="/var/www/cones/vendor/bundle/ruby/1.9.1/gems/*/bin" ; echo $NEW_PATH | sed 's/^/:/g;s/ /:/g')
+APP_PATH=/var/www/cones
+
+NAME=cones-monitor
+DESC=cones-monitor
+GOD="bundle exec god"
+
+set -e
+
+case "$1" in
+  start)
+  echo -n "Starting $DESC:"
+  if (cd $APP_PATH && $GOD -c $APP_PATH/god/web.god && $GOD start cones)
+  then
+    echo "$NAME started"
+  else
+    echo "failed"
+  fi
+  ;;
+  stop)
+  echo -n "Stopping $DESC: "
+  if (cd $APP_PATH && $GOD stop cones && $GOD terminate)
+  then
+    echo "$NAME stopped."
+  else
+    echo "failed!"
+  fi
+  ;;
+
+  reload)
+  kill -USR2 $(cat $APP_PATH/tmp/pids/unicorn.pid)
+  ;;
+
+  restart)
+  ${0} stop
+  ${0} start
+  ;;
+  *)
+  echo "Usage: /etc/init.d/$NAME {start|stop|restart}" >&2
+  exit 1
+  ;;
+esac
+
+exit 0

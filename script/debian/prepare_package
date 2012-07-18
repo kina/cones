@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+DIR_NAME = "cones"
+
+DEBIAN_PATH = "debian/#{DIR_NAME}/var/www/cones/"
+
+DEBIAN_FILES = %w(README.md .bundle Gemfile Gemfile.lock Rakefile app god
+                  config.ru config doc lib script vendor db public)
+
+[DEBIAN_PATH, "debian/#{DIR_NAME}/var/www/cones/tmp", "debian/#{DIR_NAME}/var/www/cones/log"].each {|dir| FileUtils.mkdir_p(dir)}
+
+FileUtils.cp_r DEBIAN_FILES, DEBIAN_PATH, preserve: true
+
