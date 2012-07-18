@@ -16,6 +16,10 @@
           <td><%= @customer.email %></td>
         </tr>
         <tr>
+          <th>Total vendas:</th>
+          <td><%= @customer.total_paid_orders %></td>
+        </tr>
+        <tr>
           <th>Vendas não pagas:</th>
           <td>
                 <% @customer.unpaid_orders.each do |order| %>
