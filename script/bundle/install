@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+cd vendor && rm -rf $(ls | grep -v bundle) && cd ..
+
+BUNDLE=$(which bundle) || BUNDLE="NULL"
+if [ "${BUNDLE}" = "NULL" ]; then
+  gem install bundler
+fi
+
+rm -rf .bundle
+bundle install --path=vendor/bundle
+bundle exec rake --trace assets:clean assets:precompile
+RAILS_ENV=production bundle install --deployment --without test development ci cucumber
