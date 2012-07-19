@@ -17,11 +17,6 @@ ActiveAdmin.register Customer do
   end
 
   show title: :name do
-    # attributes_table do
-    #   row :email
-    #   row :balance
-    # end
-
     render "show"
   end
 end

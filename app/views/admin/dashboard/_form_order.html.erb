@@ -1,0 +1,15 @@
+<%= semantic_form_for [:admin, order] do |f| %>
+    <fieldset class="inputs">
+        <ol>
+            <%= f.input :product %>
+            <%= f.input :customer, collection: Customer.order("name ASC").all %>
+            <%= f.input :quantity %>
+            <%= f.input :payment_value %>
+        </ol>
+    </fieldset>
+    <fieldset class="buttons">
+        <ol>
+            <%= f.action :submit %>
+        </ol>
+    </fieldset>
+<% end %>

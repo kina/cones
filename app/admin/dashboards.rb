@@ -7,38 +7,49 @@ ActiveAdmin::Dashboards.build do
   # Here is an example of a simple dashboard section
   #
 
-    section "Top Clientes" do
-      customers = Customer.all.sort_by { |c| c.total_orders }.reverse.take(4)
+    section "Top Clientes", priority: 2 do
+      customers = Customer.all.sort_by { |c| c.total_orders }.reverse.take(5)
       table_for customers do
         column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
         column("Valor") { |c| c.total_orders}
       end
     end
 
-    section "A receber" do
-      customers = Customer.all.select { |c| c.balance < 0 }.sort_by { |e| e.balance }
-      table_for customers do
+    section "A receber", priority: 3 do
+      limit = 5
+      customers = Customer.debtors
+      table_for customers.take(limit) do
         column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
         column("Valor") { |c| c.balance}
       end
+
+      if customers.size > limit
+        div { link_to "ver mais", "/admin/debtors" }
+      end
     end
 
-    section "Ultimas Vendas" do
-      table_for Order.order("created_at DESC").limit(4) do
+    section "Ultimas Vendas", priority: 4 do
+      table_for Order.order("created_at DESC").limit(3) do
         column("Produto") { |o| link_to(o.product.name, admin_product_path(o.product)) }
         column("Cliente") { |o| link_to(o.customer.name, admin_customer_path(o.customer))}
         column("Valor") { |o| o.total }
         column("Data") { |o| o.created_at.strftime("%d/%m/%Y %H:%M") }
       end
-      div { button_to "Nova Venda", new_admin_order_path, method: :get }
     end
 
-    section "Vendas por data" do
-      orders = Order.joins("LEFT OUTER JOIN products ON products.id = orders.product_id").select("products.price as payment_value, date(orders.created_at) as created_at, sum(orders.quantity) as quantity").group("date(orders.created_at)")
+    section "Vendas por data", priority: 5 do
+      limit = 3
+      orders = Order.sales_by_date.limit(limit)
       table_for orders do
         column("Data") { |o| o.created_at.strftime("%d/%m/%Y")}
         column("Total vendido") { |o| o.quantity * o.payment_value }
       end
+
+      div { link_to "ver mais", "/admin/sales_by_date" }
+    end
+
+    section "Nova Venda", priority: 1 do
+      div { render 'form_order', order: Order.new }
     end
 
   # == Render Partial Section
@@ -53,6 +64,7 @@ ActiveAdmin::Dashboards.build do
   #
   #   section "Recent Posts", :priority => 10
   #   section "Recent User", :priority => 1
+
   #
   # Will render the "Recent Users" then the "Recent Posts" sections on the dashboard.
 

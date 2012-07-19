@@ -14,6 +14,15 @@ class Order < ActiveRecord::Base
     product.name
   end
 
+  class << self
+    def sales_by_date
+      Order.joins("LEFT OUTER JOIN products ON products.id = orders.product_id")
+        .select("products.price as payment_value, date(orders.created_at) as created_at, sum(orders.quantity) as quantity")
+        .group("date(orders.created_at)")
+        .order("date(orders.created_at) DESC")
+    end
+  end
+
   private
   def process_order
     return if self.payment_value == total

@@ -20,4 +20,10 @@ class Customer < ActiveRecord::Base
   def total_debits
     debits.inject(0) { |b, d| b + d.value }
   end
+
+  class << self
+    def debtors
+      Customer.all.select { |c| c.balance < 0 }.sort_by { |e| e.balance }
+    end
+  end
 end
