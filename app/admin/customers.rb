@@ -1,4 +1,10 @@
 ActiveAdmin.register Customer do
+  action_item { link_to "Nova Venda", new_admin_order_path }
+
+  sidebar "Venda" do
+    button_to "Nova Venda", new_admin_order_path, method: :get
+  end
+
   index do
     column :name
     column :email

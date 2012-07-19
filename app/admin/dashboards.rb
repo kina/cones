@@ -7,36 +7,37 @@ ActiveAdmin::Dashboards.build do
   # Here is an example of a simple dashboard section
   #
 
-    section "TOP Clientes" do
+    section "Top Clientes" do
       customers = Customer.all.sort_by { |c| c.total_orders }.reverse.take(4)
-      table_for customers do |t|
-        t.column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
-        t.column("Valor") { |c| c.total_orders}
+      table_for customers do
+        column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
+        column("Valor") { |c| c.total_orders}
       end
     end
 
     section "A receber" do
       customers = Customer.all.select { |c| c.balance < 0 }.sort_by { |e| e.balance }
-      table_for customers do |t|
-        t.column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
-        t.column("Valor") { |c| c.balance}
+      table_for customers do
+        column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
+        column("Valor") { |c| c.balance}
       end
     end
 
     section "Ultimas Vendas" do
-      table_for Order.order("created_at DESC").limit(4) do |t|
-        t.column("Produto") { |o| link_to(o.product.name, admin_product_path(o.product)) }
-        t.column("Cliente") { |o| link_to(o.customer.name, admin_customer_path(o.customer))}
-        t.column("Valor") { |o| o.total }
-        t.column("Data") { |o| o.created_at.strftime("%d/%m/%Y %H:%M") }
+      table_for Order.order("created_at DESC").limit(4) do
+        column("Produto") { |o| link_to(o.product.name, admin_product_path(o.product)) }
+        column("Cliente") { |o| link_to(o.customer.name, admin_customer_path(o.customer))}
+        column("Valor") { |o| o.total }
+        column("Data") { |o| o.created_at.strftime("%d/%m/%Y %H:%M") }
       end
+      div { button_to "Nova Venda", new_admin_order_path, method: :get }
     end
 
     section "Vendas por data" do
       orders = Order.joins("LEFT OUTER JOIN products ON products.id = orders.product_id").select("products.price as payment_value, date(orders.created_at) as created_at, sum(orders.quantity) as quantity").group("date(orders.created_at)")
-      table_for orders do |t|
-        t.column("Data") { |o| o.created_at.strftime("%d/%m/%Y")}
-        t.column("Total vendido") { |o| o.quantity * o.payment_value }
+      table_for orders do
+        column("Data") { |o| o.created_at.strftime("%d/%m/%Y")}
+        column("Total vendido") { |o| o.quantity * o.payment_value }
       end
     end
 
@@ -44,11 +45,6 @@ ActiveAdmin::Dashboards.build do
   # The block is rendered within the context of the view, so you can
   # easily render a partial rather than build content in ruby.
   #
-  #   section "Recent Posts" do
-  #     div do
-  #       render 'recent_posts' # => this will render /app/views/admin/dashboard/_recent_posts.html.erb
-  #     end
-  #   end
 
   # == Section Ordering
   # The dashboard sections are ordered by a given priority from top left to

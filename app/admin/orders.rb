@@ -1,4 +1,8 @@
 ActiveAdmin.register Order do
+  action_item only: :show do
+    link_to "Nova Venda", new_admin_order_path
+  end
+
   form do |f|
     f.inputs "Venda" do
       f.input :product
