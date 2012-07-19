@@ -1,6 +1,8 @@
 ActiveAdmin.register Customer do
   action_item { link_to "Nova Venda", new_admin_order_path }
 
+  filter :name
+
   sidebar "Venda" do
     button_to "Nova Venda", new_admin_order_path, method: :get
   end
