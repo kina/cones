@@ -8,15 +8,15 @@ ActiveAdmin::Dashboards.build do
   #
 
     section "TOP Clientes" do
-      customers = Customer.all.sort_by {|c| c.total_orders}.reverse.take(4)
+      customers = Customer.all.sort_by { |c| c.total_orders }.reverse.take(4)
       table_for customers do |t|
         t.column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
         t.column("Valor") { |c| c.total_orders}
       end
     end
 
-    section "A pagar" do
-      customers = Customer.all.select {|c| c.balance < 0}.sort_by { |e| e.balance }
+    section "A receber" do
+      customers = Customer.all.select { |c| c.balance < 0 }.sort_by { |e| e.balance }
       table_for customers do |t|
         t.column("Nome") { |c| link_to(c.name, admin_customer_path(c)) }
         t.column("Valor") { |c| c.balance}
@@ -29,6 +29,14 @@ ActiveAdmin::Dashboards.build do
         t.column("Cliente") { |o| link_to(o.customer.name, admin_customer_path(o.customer))}
         t.column("Valor") { |o| o.total }
         t.column("Data") { |o| o.created_at.strftime("%d/%m/%Y %H:%M") }
+      end
+    end
+
+    section "Vendas por data" do
+      orders = Order.joins("LEFT OUTER JOIN products ON products.id = orders.product_id").select("products.price as payment_value, date(orders.created_at) as created_at, sum(orders.quantity) as quantity").group("date(orders.created_at)")
+      table_for orders do |t|
+        t.column("Data") { |o| o.created_at.strftime("%d/%m/%Y")}
+        t.column("Total vendido") { |o| o.quantity * o.payment_value }
       end
     end
 
